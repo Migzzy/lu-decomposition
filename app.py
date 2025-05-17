@@ -1,5 +1,7 @@
 import streamlit as st
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # --- LU Decomposition (Doolittle’s Method) ---
 def lu_decomposition(A):
@@ -68,6 +70,30 @@ if st.button("Solve"):
         st.write(y)
         st.write("Final solution x (from Ux = y):")
         st.write(x)
+
+        # --- Graphs ---
+        st.write("📊 Heatmap of Matrix A:")
+        fig_a, ax_a = plt.subplots()
+        sns.heatmap(A_np, annot=True, cmap="Blues", ax=ax_a)
+        st.pyplot(fig_a)
+
+        st.write("📊 Heatmap of Lower Matrix L:")
+        fig_l, ax_l = plt.subplots()
+        sns.heatmap(L, annot=True, cmap="Greens", ax=ax_l)
+        st.pyplot(fig_l)
+
+        st.write("📊 Heatmap of Upper Matrix U:")
+        fig_u, ax_u = plt.subplots()
+        sns.heatmap(U, annot=True, cmap="Oranges", ax=ax_u)
+        st.pyplot(fig_u)
+
+        st.write("📈 Solution Vector x:")
+        fig_x, ax_x = plt.subplots()
+        ax_x.bar(range(len(x)), x, color="purple")
+        ax_x.set_xlabel("Index")
+        ax_x.set_ylabel("Value")
+        ax_x.set_title("Solution x")
+        st.pyplot(fig_x)
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
