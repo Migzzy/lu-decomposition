@@ -31,7 +31,7 @@ def backward_substitution(U, y):
     return x
 
 # --- Streamlit UI ---
-st.title("LU Decomposition Solver (Doolittle's Method)")
+st.title("LU Decomposition Calculator (Doolittle's Method)")
 st.write("Solve Ax = b using LU Decomposition")
 
 n = st.number_input("Matrix size (n x n)", min_value=2, max_value=10, value=3)
