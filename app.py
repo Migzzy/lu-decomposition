@@ -1,21 +1,21 @@
 import streamlit as st
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import io
 
 # --- LU Decomposition (Doolittle’s Method) ---
 def lu_decomposition(A):
     n = len(A)
     L = np.zeros_like(A, dtype=float)
     U = np.zeros_like(A, dtype=float)
-
     for i in range(n):
         for k in range(i, n):
             U[i][k] = A[i][k] - sum(L[i][j] * U[j][k] for j in range(i))
         L[i][i] = 1
         for k in range(i+1, n):
             L[k][i] = (A[k][i] - sum(L[k][j] * U[j][i] for j in range(i))) / U[i][i]
-    
     return L, U
 
 def forward_substitution(L, b):
@@ -32,10 +32,15 @@ def backward_substitution(U, y):
         x[i] = (y[i] - np.dot(U[i,i+1:], x[i+1:])) / U[i,i]
     return x
 
-# --- Streamlit UI ---
-st.title("LU Decomposition Calculator (Doolittle's Method)")
-st.write("Solve Ax = b using LU Decomposition")
+# --- UI Header ---
+st.markdown("""
+    <h1 style='text-align: center; color: #00c4ff;'>LU Decomposition Calculator</h1>
+    <p style='text-align: center;'>by [Your Name], Grade 11 - STEM | Project in Practical IT</p>
+    <hr>
+""", unsafe_allow_html=True)
 
+# --- Inputs ---
+st.write("Solve Ax = b using LU Decomposition (Doolittle's Method)")
 n = st.number_input("Matrix size (n x n)", min_value=2, max_value=10, value=3)
 
 st.write("Enter matrix A (each row comma-separated):")
@@ -87,13 +92,23 @@ if st.button("Solve"):
         sns.heatmap(U, annot=True, cmap="Oranges", ax=ax_u)
         st.pyplot(fig_u)
 
-        st.write("📈 Solution Vector x:")
+        st.write("📈 Bar Graph of Solution Vector x:")
         fig_x, ax_x = plt.subplots()
         ax_x.bar(range(len(x)), x, color="purple")
         ax_x.set_xlabel("Index")
         ax_x.set_ylabel("Value")
         ax_x.set_title("Solution x")
         st.pyplot(fig_x)
+
+        # --- Download x as CSV ---
+        df_x = pd.DataFrame({"x": x})
+        csv = df_x.to_csv(index=False).encode()
+        st.download_button(
+            label="⬇️ Download solution vector x as CSV",
+            data=csv,
+            file_name="solution_x.csv",
+            mime="text/csv"
+        )
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
