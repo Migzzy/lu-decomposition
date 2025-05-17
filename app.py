@@ -35,7 +35,7 @@ def backward_substitution(U, y):
 # --- UI Header ---
 st.markdown("""
     <h1 style='text-align: center; color: #00c4ff;'>LU Decomposition Calculator</h1>
-    <p style='text-align: center;'>by [Your Name], Grade 11 - STEM | Project in Practical IT</p>
+    <p style='text-align: center;'>by Miguel Elican, CPE-2A | Numerical Methods and Analysis</p>
     <hr>
 """, unsafe_allow_html=True)
 
